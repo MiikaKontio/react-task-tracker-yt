@@ -50,6 +50,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Demo from './components/Demo/Demo';
 //AuthProvider
 import { AuthProvider } from './contexts/AuthContext';
+import { DatabaseProvider } from './contexts/DatabaseContext';
 //Language
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -110,69 +111,71 @@ function App() {
     <Container>
       <Router>
         <AuthProvider>
-          <Header title="Lifesaver App" />
-          <Routes>
-            <Route exact path='/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route path='/about' element={<About />} />
-            {/* Login */}
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            {/* Login */}
-            {/* Recipe */}
-            <Route path='/recipe/:id' element={<PrivateRoute><RecipeDetails /></PrivateRoute>} />
-            <Route path='/managerecipes' element={<PrivateRoute><ManageRecipes /></PrivateRoute>} />
-            <Route path='/managefooditems' element={<PrivateRoute><ManageFoodItems /></PrivateRoute>} />
-            {/* Recipe */}
-            {/* Drinks */}
-            <Route path='/managedrinks' element={<PrivateRoute><ManageDrinks /></PrivateRoute>} />
-            <Route path='/managedrinkingproducts' element={<PrivateRoute><ManageDrinkingProducts /></PrivateRoute>} />
-            <Route path='/drink/:id' element={<PrivateRoute><DrinkDetails /></PrivateRoute>} />
-            <Route path='/drinkingproduct/:id' element={<PrivateRoute><DrinkingProductDetails /></PrivateRoute>} />
-            {/*Drinks */}
-            {/* Exercises */}
-            <Route path='/manageexercises' element={<PrivateRoute><ManageExercises /></PrivateRoute>} />
-            <Route path='/createexercise' element={<PrivateRoute><CreateExercise /></PrivateRoute>} />
-            <Route path='/exercise/:id' element={<PrivateRoute><ExerciseDetails /></PrivateRoute>} />
-            <Route path='/managemovements' element={<PrivateRoute><ManageMovements /></PrivateRoute>} />
-            <Route path='/createmovement' element={<PrivateRoute><CreateMovement /></PrivateRoute>} />
-            {/* Exercises */}
-            {/* BMI */}
-            <Route path='/bmicalculator' element={<PrivateRoute><BmiCalculator /></PrivateRoute>} />
-            <Route path='/weighthistory' element={<PrivateRoute><WeightHistory /></PrivateRoute>} />
-            {/* BMI */}
-            {/* TaskLists */}
-            <Route path='/managetasklists' element={<PrivateRoute><ManageTaskLists /></PrivateRoute>} />
-            <Route path='/task/:id/:tasklistid' element={<PrivateRoute><TaskDetails /></PrivateRoute>} />
-            <Route path='/tasklist/:id' element={<PrivateRoute><TaskListDetails /></PrivateRoute>} />
-            <Route path='/tasklistarchive' element={<PrivateRoute><ManageTaskListsArchive /></PrivateRoute>} />
-            <Route path='/tasklistarchive/:id' element={<PrivateRoute><ArchivedTaskListDetails /></PrivateRoute>} />
-            {/* TaskLists */}
-            {/* MyProfile */}
-            <Route path='/managemyprofile' element={<PrivateRoute><ManageMyProfile /></PrivateRoute>} />
-            {/* MyProfile */}
-            {/* Backpacking */}
-            <Route path='/managebackpacking' element={<PrivateRoute><ManageBackPacking /></PrivateRoute>} />
-            <Route path='/managegear' element={<PrivateRoute><ManageGear /></PrivateRoute>} />
-            {/* Backpacking */}
-            {/* Car */}
-            <Route path='/car' element={<PrivateRoute><Car /></PrivateRoute>} />
-            {/* Car */}
-            {/* Music */}
-            <Route path='/managemusic' element={<PrivateRoute><ManageMusic /></PrivateRoute>} />
-            <Route path='/bandsseenlive' element={<PrivateRoute><BandsSeenLive /></PrivateRoute>} />
-            {/* Music */}
-            {/* Games */}
-            <Route path='/games' element={<PrivateRoute><Games /></PrivateRoute>} />
-            {/* Games */}
-            {/* Demo */}
-            <Route path='/Demo' element={<PrivateRoute><Demo /></PrivateRoute>} />
-            {/* Demo */}
-            {/* Links */}
-            <Route path='/linkslist' element={<PrivateRoute><LinksList /></PrivateRoute>} />
-            {/* Links */}
-          </Routes>
-          <Footer />
+          <DatabaseProvider>
+            <Header title="Lifesaver App" />
+            <Routes>
+              <Route exact path='/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path='/about' element={<About />} />
+              {/* Login */}
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
+              {/* Login */}
+              {/* Recipe */}
+              <Route path='/recipe/:id' element={<PrivateRoute><RecipeDetails /></PrivateRoute>} />
+              <Route path='/managerecipes' element={<PrivateRoute><ManageRecipes /></PrivateRoute>} />
+              <Route path='/managefooditems' element={<PrivateRoute><ManageFoodItems /></PrivateRoute>} />
+              {/* Recipe */}
+              {/* Drinks */}
+              <Route path='/managedrinks' element={<PrivateRoute><ManageDrinks /></PrivateRoute>} />
+              <Route path='/managedrinkingproducts' element={<PrivateRoute><ManageDrinkingProducts /></PrivateRoute>} />
+              <Route path='/drink/:id' element={<PrivateRoute><DrinkDetails /></PrivateRoute>} />
+              <Route path='/drinkingproduct/:id' element={<PrivateRoute><DrinkingProductDetails /></PrivateRoute>} />
+              {/*Drinks */}
+              {/* Exercises */}
+              <Route path='/manageexercises' element={<PrivateRoute><ManageExercises /></PrivateRoute>} />
+              <Route path='/createexercise' element={<PrivateRoute><CreateExercise /></PrivateRoute>} />
+              <Route path='/exercise/:id' element={<PrivateRoute><ExerciseDetails /></PrivateRoute>} />
+              <Route path='/managemovements' element={<PrivateRoute><ManageMovements /></PrivateRoute>} />
+              <Route path='/createmovement' element={<PrivateRoute><CreateMovement /></PrivateRoute>} />
+              {/* Exercises */}
+              {/* BMI */}
+              <Route path='/bmicalculator' element={<PrivateRoute><BmiCalculator /></PrivateRoute>} />
+              <Route path='/weighthistory' element={<PrivateRoute><WeightHistory /></PrivateRoute>} />
+              {/* BMI */}
+              {/* TaskLists */}
+              <Route path='/managetasklists' element={<PrivateRoute><ManageTaskLists /></PrivateRoute>} />
+              <Route path='/task/:id/:tasklistid' element={<PrivateRoute><TaskDetails /></PrivateRoute>} />
+              <Route path='/tasklist/:id' element={<PrivateRoute><TaskListDetails /></PrivateRoute>} />
+              <Route path='/tasklistarchive' element={<PrivateRoute><ManageTaskListsArchive /></PrivateRoute>} />
+              <Route path='/tasklistarchive/:id' element={<PrivateRoute><ArchivedTaskListDetails /></PrivateRoute>} />
+              {/* TaskLists */}
+              {/* MyProfile */}
+              <Route path='/managemyprofile' element={<PrivateRoute><ManageMyProfile /></PrivateRoute>} />
+              {/* MyProfile */}
+              {/* Backpacking */}
+              <Route path='/managebackpacking' element={<PrivateRoute><ManageBackPacking /></PrivateRoute>} />
+              <Route path='/managegear' element={<PrivateRoute><ManageGear /></PrivateRoute>} />
+              {/* Backpacking */}
+              {/* Car */}
+              <Route path='/car' element={<PrivateRoute><Car /></PrivateRoute>} />
+              {/* Car */}
+              {/* Music */}
+              <Route path='/managemusic' element={<PrivateRoute><ManageMusic /></PrivateRoute>} />
+              <Route path='/bandsseenlive' element={<PrivateRoute><BandsSeenLive /></PrivateRoute>} />
+              {/* Music */}
+              {/* Games */}
+              <Route path='/games' element={<PrivateRoute><Games /></PrivateRoute>} />
+              {/* Games */}
+              {/* Demo */}
+              <Route path='/Demo' element={<PrivateRoute><Demo /></PrivateRoute>} />
+              {/* Demo */}
+              {/* Links */}
+              <Route path='/linkslist' element={<PrivateRoute><LinksList /></PrivateRoute>} />
+              {/* Links */}
+            </Routes>
+            <Footer />
+          </DatabaseProvider>
         </AuthProvider>
       </Router>
     </Container>

@@ -32,6 +32,7 @@
         "button_save_gear": "Tallenna varuste",
         "coming_soon": "Tulossa pian...",
         "delete_gear_confirm_message": "Oletko varma, että haluat poistaa varusteen?",
+        "failed_to_delete_gear": "Varusteen poistaminen epäonnistui",
         "gear_category": "Varustekategoria",
         "gear_category_clothing": "Vaate",
         "gear_category_cooking": "Ruuanlaitto",

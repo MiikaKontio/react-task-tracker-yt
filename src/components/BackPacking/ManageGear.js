@@ -8,7 +8,9 @@ import GoBackButton from '../GoBackButton';
 import AddGear from './AddGear';
 //firebase
 import { db } from '../../firebase-config';
-import { ref, push, onValue, remove } from 'firebase/database';
+import { ref, push, onValue } from 'firebase/database';
+//db
+import { useDatabase } from '../../contexts/DatabaseContext';
 //utils
 import { getCurrentDateAsJson } from '../../utils/DateTimeUtils';
 //auth
@@ -26,8 +28,14 @@ export default function ManageGear() {
     //translation
     const { t } = useTranslation('backpacking', { keyPrefix: 'backpacking' });
 
+    //user
+    const { currentUser } = useAuth();
+
+    const { deleteItem, get } = useDatabase();
+
     //states
     const [showAdd, setShowAdd] = useState(false);
+    const [error, setError] = useState(false);
     const [gear, setGear] = useState();
     const [originalGear, setOriginalGear] = useState();
     const [loading, setLoading] = useState(true);
@@ -49,8 +57,26 @@ export default function ManageGear() {
         }
     }, [])
 
+
     /** Fetch Gears From Firebase */
     const fetchGearsFromFirebase = async () => {
+
+        try {
+            //clear the error
+            setError('');
+            setLoading(true);
+            await get(DB_GEAR).then(gear => {
+                console.log(gear);
+                setGear(gear);
+            })
+        } catch (error) {
+            setError(t('failed_to_delete_gear'));
+            console.log(error);
+        }
+
+        setLoading(false);
+
+/*
         const dbref = await ref(db, DB_GEAR);
         onValue(dbref, (snapshot) => {
             const snap = snapshot.val();
@@ -62,10 +88,8 @@ export default function ManageGear() {
             setGear(fromDB);
             setOriginalGear(fromDB);
         })
+        */
     }
-
-    //user
-    const { currentUser } = useAuth();
 
     /** Add Gear To Firebase */
     const addGear = async (gear) => {
@@ -81,15 +105,27 @@ export default function ManageGear() {
         }
     }
 
-    const deleteGear = (id) => {
-        const dbref = ref(db, `${DB_GEAR}/${id}`);
-        remove(dbref)
+    const deleteGear = async (id) => {
+
+        try {
+            //clear the error
+            setError('');
+            setLoading(true);
+            await deleteItem(id, DB_GEAR);
+        } catch (error) {
+            setError(t('failed_to_delete_gear'));
+            console.log(error);
+        }
+
+        setLoading(false);
     }
 
     return loading ? (
         <h3>{t('loading')}</h3>
     ) : (
         <div>
+
+            {error && <div className="error">{error}</div>}
             <Row>
                 <ButtonGroup>
                     <GoBackButton />

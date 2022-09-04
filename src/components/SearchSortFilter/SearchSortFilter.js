@@ -30,7 +30,8 @@ const SearchSortFilter = ({ onSet,
     showFilterNotReady,
     useNameFiltering,
     useTitleFiltering,
-    useTextFiltering
+    useTextFiltering,
+    categories
 }) => {
 
     //states
@@ -44,6 +45,7 @@ const SearchSortFilter = ({ onSet,
     const [showOnlyCore, setShowOnlyCore] = useState(false);
     const [showOnlyReady, setShowOnlyReady] = useState(false);
     const [showOnlyNotReady, setShowOnlyNotReady] = useState(false);
+    const [category, setCategory] = useState(0);
 
     //sorting
     const [_showSortByName, _setShowSortByName] = useState(showSortByName);
@@ -72,7 +74,7 @@ const SearchSortFilter = ({ onSet,
     }, [sortBy, searchString, searchStringDescription,
         showOnlyHaveAtHome, showOnlyNotHaveAtHome,
         showOnlyHaveRated, showOnlyNotHaveRated,
-        showOnlyCore,
+        showOnlyCore, category,
         showOnlyReady, showOnlyNotReady]);
 
     const filterAndSort = () => {
@@ -136,6 +138,11 @@ const SearchSortFilter = ({ onSet,
         //notready
         else if (showOnlyNotReady) {
             newList = newList.filter(x => x.reminder === false);
+        }
+
+        //category
+        if (category > 0) {
+            newList = newList.filter(x => x.category === category);
         }
 
         return newList;
@@ -400,6 +407,21 @@ const SearchSortFilter = ({ onSet,
                             </Col>
                         </Form.Group>
                     </>
+                }
+                {
+                    categories != null && categories.length > 0 && (
+                        <Form.Group className="mb-3" controlId="searchSortFilter-Category">
+                            <Form.Label>{t('category')}</Form.Label>
+                            <Form.Select
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            >
+                                {categories.map(({ id, name }) => (
+                                    <option value={id} key={id}>{t(`category_${name}`)}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    )
                 }
             </Form>
         </div>

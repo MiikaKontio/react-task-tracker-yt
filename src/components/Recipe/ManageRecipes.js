@@ -31,6 +31,8 @@ import ScrollToTop from '../ScrollToTop';
 import PageContentWrapper from '../PageContentWrapper';
 import Counter from '../Counter';
 import CenterWrapper from '../CenterWrapper';
+//categories
+import { RecipeCategories } from './Categories';
 
 const ManageRecipes = () => {
 
@@ -165,7 +167,9 @@ const ManageRecipes = () => {
           showSortByCreatedDate={true}
           showSortByStarRating={true}
           showSearchByDescription={true}
-          originalList={originalRecipes} />
+          originalList={originalRecipes}
+          categories={RecipeCategories}
+          />
         {
           recipes != null && recipes.length > 0 ? (
             <>

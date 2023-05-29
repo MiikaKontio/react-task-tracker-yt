@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../Buttons/Button';
 import GoBackButton from '../Buttons/GoBackButton';
 import { useAuth } from '../../contexts/AuthContext';
-import { getCurrentDateAsJson, getCurrentDate, getCurrentTime } from '../../utils/DateTimeUtils';
+import { getCurrentDateAsJson, convertDateAndTimeToJson } from '../../utils/DateTimeUtils';
 import * as Constants from '../../utils/Constants';
 import { Categories, ExerciseCategories } from './Categories';
 import PageTitle from '../Site/PageTitle';
@@ -64,7 +64,9 @@ const CreateExercise = () => {
             return;
         }
 
-        saveExercise({ date, time, category });
+        var datetime = convertDateAndTimeToJson(date, time);
+
+        saveExercise({ datetime, category });
     }
 
     const saveExercise = async (exercise) => {

@@ -127,6 +127,7 @@ const ExerciseDetails = () => {
                                             </tr>
                                             <tr>
                                                 <td>{t('modified')}</td>
+                                                {exercise.modified}
                                                 <td>{getJsonAsDateTimeString(exercise.modified, i18n.language)}</td>
                                             </tr>
                                             <tr>

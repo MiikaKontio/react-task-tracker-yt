@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import { Link } from 'react-router-dom';
 import StarRating from '../StarRating/StarRating';
 import { getIconNameByCategory } from './Categories';
 import Icon from '../Icon';
 import { getExerciseCategoryNameByID } from '../../utils/ListUtils';
 import * as Constants from '../../utils/Constants';
+import { getJsonAsDateTimeString } from '../../utils/DateTimeUtils';
 
 const Exercise = ({ exercise, onDelete }) => {
 
@@ -16,10 +18,11 @@ const Exercise = ({ exercise, onDelete }) => {
             <h5>
                 <span>
                     <Icon name={getIconNameByCategory(exercise.category)} />
-                    {exercise.date + ' ' + exercise.time
-                        // TODO: Korjaa formaatit kieleistyksien mukaan
-                        //  getDateAndTimeAsDateTimeString(exercise.date, exercise.time, i18n.language)
-                    }
+                    <Link style={{ textDecoration: 'none' }} to={`${Constants.NAVIGATION_EXERCISE}/${exercise.id}`}>
+                        {
+                            getJsonAsDateTimeString(exercise.datetime, i18n.language)
+                        }
+                    </Link>
                 </span>
                 <Icon className='deleteBtn' name={Constants.ICON_DELETE} color='red' fontSize='1.2em' cursor='pointer'
                     onClick={() => { if (window.confirm(t('delete_exercise_confirm_message'))) { onDelete(exercise.id); } }} />
@@ -33,9 +36,7 @@ const Exercise = ({ exercise, onDelete }) => {
             <p>
                 {exercise.description}
             </p>
-            <p>
-                <Link className='btn btn-primary' to={`${Constants.NAVIGATION_EXERCISE}/${exercise.id}`}>{t('view_details')}</Link>
-            </p>
+
             <StarRating starCount={exercise.stars} />
         </div>
     )

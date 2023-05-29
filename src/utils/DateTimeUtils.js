@@ -21,38 +21,47 @@ export function getCurrentTime() {
 
 /** Get only time part from Json datetime */
 export function getJsonAsTimeString(json, language) {
-    return getTimeString(json, language);
+    return getTimeStringFromJson(json, language);
 }
 
 /** Get only date part from Json datetime */
 export function getJsonAsDateString(json, language) {
-    return getDateString(json, language);
+    return getDateStringFromJson(json, language);
 }
 
 /** Get both date and time parts from Json datetime */
 export function getJsonAsDateTimeString(json, language) {
-    return getDateTimeString(json, language);
+    return getDateTimeStringFromJson(json, language);
 }
 
-export function getDateAndTimeAsDateTimeString(date, time, language) {
+/** Add date and time together and convert to Json ISO format */
+export function convertDateAndTimeToJson(date, time) {
 
-    let hasNoTime = false;
-    if (time === "") {
-        time = "00:00";
-        hasNoTime = true;
+    console.log("convertDateAndTimeToJson, date", date);
+
+    const myDate = new Date(date);
+    var dateString = getDateStringFromDate(myDate);
+
+    console.log("dateString", dateString);
+
+    var timeString = "";
+    if (!isEmptyOrUndefined(time)) {
+        const timeTemp = new Date(time);
+        timeString = timeTemp.getHours() + ':' + timeTemp.getMinutes() + ':00';
+    } else {
+        timeString = "00:00:00";
     }
 
-    const jsonDate = date + 'T' + time + ':00.000Z';
-    const datePart = getDateString(jsonDate, language);
+    console.log("timestring", timeString);
 
-    if (hasNoTime) {
-        return datePart;
-    }
-    const timePart = getTimeString(jsonDate, language);
-    return datePart + ' ' + timePart;
+    var combined = new Date(dateString + ' ' + timeString);
+
+    var iso = combined.toISOString();
+
+    return iso;
 }
 
-function getTimeString(json, language = Languages.EN) {
+function getTimeStringFromJson(json, language = Languages.EN) {
     if (isEmptyOrUndefined(json)) {
         return "";
     }
@@ -72,11 +81,15 @@ function getTimeString(json, language = Languages.EN) {
     }
 }
 
-function getDateString(json, language = Languages.EN) {
+function getDateStringFromJson(json, language = Languages.EN) {
     if (isEmptyOrUndefined(json)) {
         return "";
     }
     const myDate = new Date(json);
+    return getDateStringFromDate(myDate, language);
+}
+
+function getDateStringFromDate(myDate, language) {
     const date = myDate.getDate();
     const month = myDate.getMonth() + 1;
     const year = myDate.getFullYear();
@@ -91,12 +104,12 @@ function getDateString(json, language = Languages.EN) {
     }
 }
 
-function getDateTimeString(json, language = Languages.EN) {
+function getDateTimeStringFromJson(json, language = Languages.EN) {
     if (isEmptyOrUndefined(json)) {
         return "";
     }
-    const dateStr = getDateString(json, language);
-    const timeString = getTimeString(json, language);
+    const dateStr = getDateStringFromJson(json, language);
+    const timeString = getTimeStringFromJson(json, language);
     return `${dateStr} ${timeString}`;
 }
 

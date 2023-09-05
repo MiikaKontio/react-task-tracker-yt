@@ -218,7 +218,8 @@ export const NAVIGATION_MUSIC_BAND = '/band';
 export const NAVIGATION_PERSON = '/person';
 //recipe
 export const NAVIGATION_RECIPE = '/recipe';
-//tasklist
+//tasklist & task
+export const NAVIGATION_TASK = '/task';
 export const NAVIGATION_TASKLIST = '/tasklist';
 export const NAVIGATION_TASKLIST_ARCHIVE = '/tasklistarchive';
 //signup

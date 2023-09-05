@@ -7,6 +7,7 @@ import { useState } from 'react';
 import AddTaskList from './AddTaskList';
 import { getCurrentDateAsJson } from '../../utils/DateTimeUtils';
 import { updateToFirebaseById } from '../../datatier/datatier';
+import { Card } from 'react-bootstrap';
 
 export default function TaskList({ taskList, archived, onDelete }) {
 
@@ -23,9 +24,9 @@ export default function TaskList({ taskList, archived, onDelete }) {
     }
 
     return (
-        <div className='listContainer'>
-            {!editable &&
-                <>
+        <>
+            <Card className='cardCustom' style={{ marginBottom: '10px' }}>
+                <Card.Header>
                     <h5>
                         <span>
                             <Icon name={Constants.ICON_LIST_ALT} color='gray' />
@@ -48,13 +49,17 @@ export default function TaskList({ taskList, archived, onDelete }) {
                             />
                         </RightWrapper>
                     </h5>
-                    <p>{taskList.description}</p>
-                </>
-            }
-            {
-                editable && <AddTaskList taskListID={taskList.id} onClose={() => setEditable(false)} onSave={updateTaskList} showLabels={false} />
-            }
-        </div>
+                </Card.Header>
+                <Card.Body>
+                    <Card.Subtitle>{taskList.description}</Card.Subtitle>
+                    <Card.Text href="#">
+                        {
+                            editable && <AddTaskList taskListID={taskList.id} onClose={() => setEditable(false)} onSave={updateTaskList} showLabels={false} />
+                        }
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        </>
     )
 }
 

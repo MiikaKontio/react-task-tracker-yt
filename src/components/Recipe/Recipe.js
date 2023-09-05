@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Card } from 'react-bootstrap';
 import { useState } from 'react'
 import StarRating from '../StarRating/StarRating';
 import { db } from '../../firebase-config';
@@ -47,7 +47,7 @@ export default function Recipe({ recipeType, translation, recipe, onDelete }) {
     );
 
     const makeShoppingList = async () => {
-        
+
         const incredients = await fetchIncredientsFromFirebase(recipe.id);
 
         if (incredients && incredients.length > 0) {
@@ -120,12 +120,9 @@ export default function Recipe({ recipeType, translation, recipe, onDelete }) {
     }
 
     return (
-        <div className={recipe.isCore === true ? `listContainer coreRecipe` : 'listContainer'}>
-            <h5>
-                <span>
-                    <Icon name={getIconName(recipeType, recipe.category)} color='gray' />
-                    {recipe.title}
-                </span>
+        <Card className={recipe.isCore === true ? `cardCustom coreRecipe` : 'cardCustom'} style={{ marginBottom: '10px' }}>
+            <Card.Header>
+
                 <RightWrapper>
                     <Icon name={Constants.ICON_EDIT} className={Constants.CLASSNAME_EDITBTN}
                         style={{ color: 'light-gray', cursor: 'pointer', fontSize: '1.2em' }}
@@ -135,56 +132,70 @@ export default function Recipe({ recipeType, translation, recipe, onDelete }) {
                         onClick={() => { if (window.confirm(t('delete_recipe_confirm_message'))) { onDelete(recipe.id); } }}
                     />
                 </RightWrapper>
-            </h5>
+                <span>
+                    <Icon name={getIconName(recipeType, recipe.category)} color='gray' />
+                    {recipe.title}
+                </span>
 
-            <Alert message={message} showMessage={showMessage}
-                error={error} showError={showError}
-                variant='success' onClose={() => { setShowMessage(false); setShowError(false); }}
-            />
 
-            {recipe.category > 0 ? !editable && (
-                <p> {getCategory(recipe.category)}</p>
-            ) : ('')}
-            {!editable &&
-                <p>{recipe.description}</p>
-            }
-            {!editable &&
-                <p>{recipe.incredients}</p>
-            }
-            {!editable &&
-                <p>
-                    <Link className='btn btn-primary' to={`${getViewDetailsUrl(recipeType)}/${recipe.id}`}>{t('view_details')}</Link>
-                    <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                    >
-                        <span style={{ marginLeft: '5px' }}>
-                            <FaShoppingCart style={{ cursor: 'pointer', marginRight: '5px', fontSize: '1.2em' }}
-                                onClick={() => { if (window.confirm(t('create_shoppinglist_confirm_message'))) { makeShoppingList() } }} />
+                <div style={{ fontWeight: 'normal' }}>
+                    <StarRating starCount={recipe.stars} />
+                </div>
+
+            </Card.Header>
+            <Card.Body>
+
+                <Card.Text>
+                    <Alert message={message} showMessage={showMessage}
+                        error={error} showError={showError}
+                        variant='success' onClose={() => { setShowMessage(false); setShowError(false); }}
+                    />
+
+                    {recipe.category > 0 ? !editable && (
+                        <p><i> {getCategory(recipe.category)}</i></p>
+                    ) : ('')}
+                    {!editable &&
+                        <p>{recipe.description}</p>
+                    }
+                    {!editable &&
+                        <p>{recipe.incredients}</p>
+                    }
+                    {!editable &&
+                        <span>
+                            <Link className='btn btn-primary' to={`${getViewDetailsUrl(recipeType)}/${recipe.id}`}>{t('view_details')}</Link>
+                            <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltip}
+                            >
+                                <span style={{ marginLeft: '5px' }}>
+                                    <FaShoppingCart style={{ cursor: 'pointer', marginRight: '5px', fontSize: '1.2em' }}
+                                        onClick={() => { if (window.confirm(t('create_shoppinglist_confirm_message'))) { makeShoppingList() } }} />
+                                </span>
+                            </OverlayTrigger>
                         </span>
-                    </OverlayTrigger>
-                </p>
-            }
-            <StarRating starCount={recipe.stars} />
-            {
-                editable && ((
-                    recipeType === RecipeTypes.Food && (
-                        <AddRecipe
-                            showLabels={false}
-                            recipeID={recipe.id}
-                            onClose={() => setEditable(false)}
-                            onSave={updateRecipe} />)) ||
-                    (recipeType === RecipeTypes.Drink && (
-                        <AddDrink
-                            showLabels={false}
-                            drinkID={recipe.id}
-                            onClose={() => setEditable(false)}
-                            onSave={updateRecipe} />
-                    ))
-                )
-            }
-        </div>
+                    }
+
+                    {
+                        editable && ((
+                            recipeType === RecipeTypes.Food && (
+                                <AddRecipe
+                                    showLabels={false}
+                                    recipeID={recipe.id}
+                                    onClose={() => setEditable(false)}
+                                    onSave={updateRecipe} />)) ||
+                            (recipeType === RecipeTypes.Drink && (
+                                <AddDrink
+                                    showLabels={false}
+                                    drinkID={recipe.id}
+                                    onClose={() => setEditable(false)}
+                                    onSave={updateRecipe} />
+                            ))
+                        )
+                    }
+                </Card.Text>
+            </Card.Body>
+        </Card>
     )
 }
 

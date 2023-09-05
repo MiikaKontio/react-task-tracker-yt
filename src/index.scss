@@ -150,6 +150,10 @@ form {
 
 /* Custom Start */
 
+.card.cardCustom {
+    background-color: #faf1db;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -254,6 +258,10 @@ form {
     background-color: #333333;
 }
 
+#dark .card.cardCustom {
+    background-color: #333333;
+}
+
 #dark .accordion-header .accordion-button {
     background-color: black;
 }
@@ -279,6 +287,10 @@ form {
 
 #dark .btn-primary {
     background-color: #0c479f;
+}
+
+#dark .btn-danger {
+    background-color: #bb2d3b;
 }
 
 #dark .form-control,
@@ -335,6 +347,10 @@ form {
 
 #dark .deleteBtn {
     color: red;
+}
+
+#dark .editBtn {
+    color: rgb(168, 109, 0);
 }
 
 /* Theme end */

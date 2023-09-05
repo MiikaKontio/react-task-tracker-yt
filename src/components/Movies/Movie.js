@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FaCheckSquare } from 'react-icons/fa';
+import { FaCheckSquare, FaSquare } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import StarRating from '../StarRating/StarRating';
 import Icon from '../Icon';
@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { getCurrentDateAsJson } from '../../utils/DateTimeUtils';
 import { updateToFirebaseById } from '../../datatier/datatier';
 import AddMovie from './AddMovie';
+import { Button, Card } from 'react-bootstrap';
 
 export default function Movie({ movie, onDelete, onEdit }) {
 
@@ -36,78 +37,69 @@ export default function Movie({ movie, onDelete, onEdit }) {
     }
 
     return (
-        <div className='listContainer'>
-            <h5>
-                <span>
-                    {movie.name} {movie.publishYear > 0 ? '(' + movie.publishYear + ')' : ''}
-                </span>
-                <RightWrapper>
-                    <Icon name={Constants.ICON_EDIT} className={Constants.CLASSNAME_EDITBTN}
-                        style={{ color: 'light-gray', cursor: 'pointer', fontSize: '1.2em' }}
-                        onClick={() => editable ? setEditable(false) : setEditable(true)} />
-                    <Icon className={Constants.CLASSNAME_DELETEBTN}
-                        name={Constants.ICON_DELETE}
-                        color={Constants.COLOR_DELETEBUTTON} fontSize='1.2em' cursor='pointer'
-                        onClick={() => {
-                            if (window.confirm(t('delete_movie_confirm_message'))) {
-                                onDelete(movie.id);
-                            }
-                        }} />
-                </RightWrapper>
-            </h5>
-            {!editable &&
-                <p>
-                    {movie.nameFi !== "" ? movie.nameFi : ''}
-                </p>
-            }
-            {!editable &&
-                <p>
-                    {movie.format > 0 ?
+        <>
+
+            <Card style={{ marginBottom: '10px' }}>
+                <Card.Header as="h5">{movie.name} {movie.publishYear > 0 ? '(' + movie.publishYear + ')' : ''}
+
+                    <RightWrapper>
+                        <Icon name={Constants.ICON_EDIT} className={'btn ' + Constants.CLASSNAME_EDITBTN}
+                            style={{ color: 'light-gray', cursor: 'pointer', fontSize: '1.2em' }}
+                            onClick={() => editable ? setEditable(false) : setEditable(true)} />
+                        <Icon className={'btn ' + Constants.CLASSNAME_DELETEBTN}
+                            name={Constants.ICON_DELETE}
+                            color={Constants.COLOR_DELETEBUTTON}
+                            style={{ cursor: 'pointer', fontSize: '1.2em' }}
+                            onClick={() => {
+                                if (window.confirm(t('delete_movie_confirm_message'))) {
+                                    onDelete(movie.id);
+                                }
+                            }} />
+                    </RightWrapper>
+                </Card.Header>
+                <Card.Body>
+                    <Card.Subtitle>{movie.nameFi !== "" ? movie.nameFi : ''}</Card.Subtitle>
+                    <Card.Text>{movie.format > 0 ?
                         (<span> {
                             t('movie_format_' + getMovieFormatNameByID(movie.format))
                         }</span>) : ('')}
-                </p>
-            }
-            {!editable &&
-                <p>
-                    {movie.description}
-                </p>
-            }
-            {!editable &&
-                <p>
-                    <Link className='btn btn-primary' to={`${Constants.NAVIGATION_MOVIE}/${movie.id}`}>{t('view_details')}</Link>
-                </p>
-            }
-            <StarRating starCount={movie.stars} />
+                        <br />
+                        {movie.description}
+                        <StarRating starCount={movie.stars} />
+                        {
+                            editable && <AddMovie
+                                movieID={movie.id}
+                                onClose={() => setEditable(false)}
+                                onSave={updateMovie}
+                                showLabels={false} />
+                        }
+                    </Card.Text>
+                    <Card.Link href="#">
+                        <Link className='btn btn-primary' to={`${Constants.NAVIGATION_MOVIE}/${movie.id}`}>{t('view_details')}</Link>
+                    </Card.Link>
+                    <Card.Link href="#">
+                        {
+                            movie.haveAtHome &&
+                            <span
+                                onClick={() => { markNotHaveAtHome() }}
+                                className='btn btn-success' style={{ margin: '5px' }}>
+                                {t('have')}&nbsp;
+                                <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
+                            </span>
+                        }
+                        {
+                            !movie.haveAtHome &&
+                            <Button
+                                onClick={() => { markHaveAtHome() }}
+                                className='btn btn-danger' style={{ margin: '5px' }}>
+                                {t('have_not')}&nbsp;
+                                <FaSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
+                            </Button>
 
-            {
-                editable && <AddMovie
-                    movieID={movie.id}
-                    onClose={() => setEditable(false)}
-                    onSave={updateMovie}
-                    showLabels={false} />
-            }
-
-            <p>
-                {
-                    movie.haveAtHome &&
-                    <span
-                        onClick={() => { markNotHaveAtHome() }}
-                        className='btn btn-success' style={{ margin: '5px' }}>
-                        {t('have')}&nbsp;
-                        <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
-                    </span>
-                }
-                {
-                    !movie.haveAtHome &&
-                    <span
-                        onClick={() => { markHaveAtHome() }}
-                        className='btn btn-danger' style={{ margin: '5px' }}>
-                        {t('have_not')}&nbsp;
-                        <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
-                    </span>
-                }
-            </p>
-        </div>
+                        }
+                    </Card.Link>
+                </Card.Body>
+            </Card>
+        </>
     )
 }

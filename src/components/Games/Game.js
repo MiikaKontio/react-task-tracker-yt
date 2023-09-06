@@ -93,6 +93,7 @@ export default function Game({ game, onDelete, onEdit }) {
 
             <p>
                 {
+                    /* TODO tee tästä jokin toggle button komponentti */
                     game.haveAtHome &&
                     <span
                         onClick={() => { markNotHaveAtHome() }}

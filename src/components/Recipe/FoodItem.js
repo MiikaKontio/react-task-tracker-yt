@@ -58,6 +58,7 @@ export default function FoodItem({ foodItem, onDelete, onEdit }) {
             }
             <p>
                 {
+                    /* TODO tee tästä jokin toggle button komponentti */
                     foodItem.haveAtHome &&
                     <span
                         onClick={() => { markNotHaveAtHome() }}

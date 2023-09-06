@@ -62,6 +62,7 @@ export default function DrinkingProduct({ drinkingProduct, onDelete, onEdit }) {
             <p>
                 <Link className='btn btn-primary' to={`${Constants.NAVIGATION_DRINKINGPRODUCT}/${drinkingProduct.id}`}>{t('view_details')}</Link>
                 {
+                    /* TODO tee tästä jokin toggle button komponentti */
                     drinkingProduct.haveAtHome &&
                     <span
                         onClick={() => { markNotHaveAtHome() }}

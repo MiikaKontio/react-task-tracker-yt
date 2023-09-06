@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FaCheckSquare } from 'react-icons/fa';
+import { FaCheckSquare, FaSquare } from 'react-icons/fa';
 import * as Constants from '../../utils/Constants';
 import { getMusicFormatNameByID } from '../../utils/ListUtils';
 import { getCurrentDateAsJson } from '../../utils/DateTimeUtils';
@@ -73,6 +73,7 @@ export default function Record({ record, onDelete, onEdit }) {
             editClicked={editClicked}
         >
             {
+                /* TODO tee tästä jokin toggle button komponentti */
                 record.haveAtHome &&
                 <Button
                     onClick={() => { markNotHaveAtHome() }}
@@ -89,7 +90,7 @@ export default function Record({ record, onDelete, onEdit }) {
                     variant={Constants.VARIANT_DANGER}
                     style={{ margin: '5px' }}>
                     {t('have_not')}&nbsp;
-                    <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
+                    <FaSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
                 </Button>
             }
             {

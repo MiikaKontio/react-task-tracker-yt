@@ -58,6 +58,7 @@ export default function Movie({ movie, onDelete, onEdit }) {
             <br />
 
             {
+                /* TODO tee tästä jokin toggle button komponentti */
                 movie.haveAtHome &&
                 <Button
                     onClick={() => { markNotHaveAtHome() }}

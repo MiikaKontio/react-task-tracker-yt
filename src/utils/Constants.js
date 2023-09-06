@@ -1,3 +1,9 @@
+//bootstrap
+export const VARIANT_DANGER = 'danger';
+export const VARIANT_INFO = 'info';
+export const VARIANT_PRIMARY = 'primary';
+export const VARIANT_SUCCESS = 'success';
+
 //colors
 export const COLOR_ADDBUTTON_CLOSED = 'green';
 export const COLOR_ADDBUTTON_OPEN = 'red';

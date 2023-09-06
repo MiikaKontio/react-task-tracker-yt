@@ -148,7 +148,7 @@ export default function Recipe({ recipeType, translation, recipe, onDelete }) {
                 <Card.Text>
                     <Alert message={message} showMessage={showMessage}
                         error={error} showError={showError}
-                        variant='success' onClose={() => { setShowMessage(false); setShowError(false); }}
+                        variant={Constants.VARIANT_SUCCESS} onClose={() => { setShowMessage(false); setShowError(false); }}
                     />
 
                     {recipe.category > 0 ? !editable && (

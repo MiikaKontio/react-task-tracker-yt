@@ -19,6 +19,8 @@ import { getMovieFormatNameByID } from '../../utils/ListUtils';
 import StarRatingWrapper from '../StarRating/StarRatingWrapper';
 import AccordionElement from '../AccordionElement';
 import useFetch from '../useFetch';
+import { Modal } from 'react-bootstrap';
+import { useToggle } from '../useToggle';
 
 export default function MovieDetails() {
 
@@ -34,8 +36,8 @@ export default function MovieDetails() {
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
 
-    //states
-    const [showEdit, setShowEdit] = useState(false);
+    //modal
+    const { status: showEdit, toggleStatus: toggleShowEdit } = useToggle();
 
     //fetch data
     const { data: movie, loading } = useFetch(Constants.DB_MOVIES, "", params.id);
@@ -95,7 +97,7 @@ export default function MovieDetails() {
                         iconName={Constants.ICON_EDIT}
                         text={showEdit ? t('button_close') : ''}
                         color={showEdit ? Constants.COLOR_EDITBUTTON_OPEN : Constants.COLOR_EDITBUTTON_CLOSED}
-                        onClick={() => setShowEdit(!showEdit)} />
+                        onClick={() => toggleShowEdit()} />
                 </ButtonGroup>
             </Row>
 
@@ -119,11 +121,19 @@ export default function MovieDetails() {
 
             <Alert message={message} showMessage={showMessage}
                 error={error} showError={showError}
-                variant='success' onClose={() => { setShowMessage(false); setShowError(false); }} />
+                variant={Constants.VARIANT_SUCCESS} 
+                onClose={() => { setShowMessage(false); setShowError(false); }}
+            />
 
-            {showEdit &&
-                <AddMovie onSave={updateMovie} movieID={params.id} onClose={() => setShowEdit(false)} />
-            }
+            <Modal show={showEdit} onHide={toggleShowEdit}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{t('modal_header_edit_movie')}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <AddMovie onSave={updateMovie} movieID={params.id} onClose={() => toggleShowEdit()} />
+                </Modal.Body>
+            </Modal>
+
             <hr />
             <ImageComponent url={Constants.DB_MOVIE_IMAGES} objID={params.id} />
             <CommentComponent objID={params.id} url={Constants.DB_MOVIE_COMMENTS} onSave={addCommentToMovie} />

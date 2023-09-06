@@ -92,7 +92,7 @@ export default function ManageMovies() {
 
             <Alert message={message} showMessage={showMessage}
                 error={error} showError={showError}
-                variant='success'
+                variant={Constants.VARIANT_SUCCESS}
                 onClose={() => { setShowMessage(false); setShowError(false); }}
             />
 

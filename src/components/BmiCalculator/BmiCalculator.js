@@ -122,7 +122,9 @@ export default function BmiCalculator() {
 
             <Alert message={message} showMessage={showMessage}
                 error={error} showError={showError}
-                variant='primary' onClose={() => { setShowMessage(false); setShowError(false); }} />
+                variant={Constants.VARIANT_PRIMARY}
+                onClose={() => { setShowMessage(false); setShowError(false); }}
+            />
 
             <Form onSubmit={onSubmit}>
                 <Form.Group className="mb-3" controlId="bmiCalculatorForm-Height">

@@ -92,7 +92,7 @@ export default function ManageMusicEvents() {
 
             <Alert message={message} showMessage={showMessage}
                 error={error} showError={showError}
-                variant='success'
+                variant={Constants.VARIANT_SUCCESS}
                 onClose={() => { setShowMessage(false); setShowError(false); }}
             />
 

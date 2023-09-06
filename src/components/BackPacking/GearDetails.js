@@ -19,6 +19,8 @@ import ImageComponent from '../ImageUpload/ImageComponent';
 import StarRatingWrapper from '../StarRating/StarRatingWrapper';
 import AccordionElement from '../AccordionElement';
 import useFetch from '../useFetch';
+import { Modal } from 'react-bootstrap';
+import { useToggle } from '../useToggle';
 
 export default function GearDetails() {
 
@@ -31,8 +33,8 @@ export default function GearDetails() {
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
 
-    //states
-    const [showEdit, setShowEdit] = useState(false);
+    //modal
+    const { status: showEdit, toggleStatus: toggleShowEdit } = useToggle();
 
     //params
     const params = useParams();
@@ -97,7 +99,7 @@ export default function GearDetails() {
                         iconName={Constants.ICON_EDIT}
                         text={showEdit ? t('button_close') : ''}
                         color={showEdit ? Constants.COLOR_EDITBUTTON_OPEN : Constants.COLOR_EDITBUTTON_CLOSED}
-                        onClick={() => setShowEdit(!showEdit)} />
+                        onClick={() => toggleShowEdit()} />
                 </ButtonGroup>
             </Row>
 
@@ -116,11 +118,17 @@ export default function GearDetails() {
 
             <Alert message={message} showMessage={showMessage}
                 error={error} showError={showError}
-                variant='success' onClose={() => { setShowMessage(false); setShowError(false); }} />
+                variant={Constants.VARIANT_SUCCESS} onClose={() => { setShowMessage(false); setShowError(false); }}
+            />
 
-            {showEdit &&
-                <AddGear onSave={updateGear} gearID={params.id} onClose={() => setShowEdit(false)} />
-            }
+            <Modal show={showEdit} onHide={toggleShowEdit}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{t('modal_header_edit_gear')}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <AddGear onSave={updateGear} gearID={params.id} onClose={() => toggleShowEdit()} />
+                </Modal.Body>
+            </Modal>
 
             <hr />
             <ImageComponent url={Constants.DB_BACKPACKING_GEAR_IMAGES} objID={params.id} />

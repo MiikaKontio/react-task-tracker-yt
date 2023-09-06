@@ -1,28 +1,26 @@
 import { useTranslation } from 'react-i18next';
 import { FaCheckSquare } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import StarRating from '../StarRating/StarRating';
-import Icon from '../Icon';
 import * as Constants from '../../utils/Constants';
 import { getMusicFormatNameByID } from '../../utils/ListUtils';
-import RightWrapper from '../Site/RightWrapper';
-import { useState } from 'react';
 import { getCurrentDateAsJson } from '../../utils/DateTimeUtils';
 import { updateToFirebaseById } from '../../datatier/datatier';
 import AddRecord from './AddRecord';
+import { useToggle } from '../useToggle';
+import CustomCard from '../Site/CustomCard';
+import { Button } from 'react-bootstrap';
 
 export default function Record({ record, onDelete, onEdit }) {
 
     //translation
     const { t } = useTranslation(Constants.TRANSLATION_MUSIC, { keyPrefix: Constants.TRANSLATION_MUSIC });
 
-    //states
-    const [editable, setEditable] = useState(false);
+    //toggle
+    const { status: showEdit, toggleStatus: toggleShowEdit } = useToggle();
 
     const updateRecord = (updateRecordID, object) => {
         object["modified"] = getCurrentDateAsJson();
         updateToFirebaseById(Constants.DB_MUSIC_RECORDS, updateRecordID, object);
-        setEditable(false);
+        toggleShowEdit();
     }
 
     const markHaveAtHome = () => {
@@ -35,74 +33,73 @@ export default function Record({ record, onDelete, onEdit }) {
         onEdit(record);
     }
 
-    return (
-        <div className='listContainer'>
-            <h5>
-                <span>
-                    {record.band} {record.band !== '' ? '-' : ''} {record.name} {record.publishYear > 0 ? '(' + record.publishYear + ')' : ''}
-                </span>
-                <RightWrapper>
-                    <Icon name={Constants.ICON_EDIT} className={Constants.CLASSNAME_EDITBTN}
-                        style={{ color: 'light-gray', cursor: 'pointer', fontSize: '1.2em' }}
-                        onClick={() => editable ? setEditable(false) : setEditable(true)} />
-                    <Icon className={Constants.CLASSNAME_DELETEBTN}
-                        name={Constants.ICON_DELETE}
-                        color={Constants.COLOR_DELETEBUTTON} fontSize='1.2em' cursor='pointer'
-                        onClick={() => {
-                            if (window.confirm(t('delete_music_confirm_message'))) {
-                                onDelete(record.id);
-                            }
-                        }} />
-                </RightWrapper>
-            </h5>
-            {!editable &&
-                <p>
-                    {record.format > 0 ?
-                        (<span> {
-                            t('music_format_' + getMusicFormatNameByID(record.format))
-                        }</span>) : ('')}
-                </p>
-            }
-            {!editable &&
-                <p>
-                    {record.description}
-                </p>
-            }
-            {!editable &&
-                <p>
-                    <Link className='btn btn-primary' to={`${Constants.NAVIGATION_MUSIC_RECORD}/${record.id}`}>{t('view_details')}</Link>
-                </p>
-            }
-            <StarRating starCount={record.stars} />
+    const getTitle = () => {
 
+        let title = record.band;
+        if (record.band !== '') {
+            title += ' - ';
+        }
+        title += record.name;
+        if (record.publishYear > 0) {
+            title += ' (' + record.publishYear + ')';
+        }
+        return title;
+    }
+
+    const getSubTitle = () => {
+        if (record.format > 0) {
+            return t('music_format_' + getMusicFormatNameByID(record.format));
+        }
+        return '';
+    }
+
+    const editClicked = () => {
+        toggleShowEdit();
+    }
+
+    return (
+
+        <CustomCard
+            deleteConfirmText={t('delete_music_confirm_message')}
+            stars={record.stars}
+            showStarRating={true}
+            subTitle={getSubTitle()}
+            title={getTitle()}
+            id={record.id}
+            description={record.description}
+            onDelete={onDelete}
+            linkUrl={`${Constants.NAVIGATION_MUSIC_RECORD}/${record.id}`}
+            linkText={t('view_details')}
+            editClicked={editClicked}
+        >
             {
-                editable && <AddRecord
+                record.haveAtHome &&
+                <Button
+                    onClick={() => { markNotHaveAtHome() }}
+                    variant={Constants.VARIANT_SUCCESS}
+                    style={{ margin: '5px' }}>
+                    {t('have')}&nbsp;
+                    <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
+                </Button>
+            }
+            {
+                !record.haveAtHome &&
+                <Button
+                    onClick={() => { markHaveAtHome() }}
+                    variant={Constants.VARIANT_DANGER}
+                    style={{ margin: '5px' }}>
+                    {t('have_not')}&nbsp;
+                    <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
+                </Button>
+            }
+            {
+                showEdit && <AddRecord
                     recordID={record.id}
-                    onClose={() => setEditable(false)}
+                    onClose={() => toggleShowEdit()}
                     onSave={updateRecord}
                     showLabels={false} />
             }
+        </CustomCard>
 
-            <p>
-                {
-                    record.haveAtHome &&
-                    <span
-                        onClick={() => { markNotHaveAtHome() }}
-                        className='btn btn-success' style={{ margin: '5px' }}>
-                        {t('have')}&nbsp;
-                        <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
-                    </span>
-                }
-                {
-                    !record.haveAtHome &&
-                    <span
-                        onClick={() => { markHaveAtHome() }}
-                        className='btn btn-danger' style={{ margin: '5px' }}>
-                        {t('have_not')}&nbsp;
-                        <FaCheckSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />
-                    </span>
-                }
-            </p>
-        </div>
     )
 }

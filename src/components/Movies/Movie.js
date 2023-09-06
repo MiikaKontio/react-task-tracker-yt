@@ -14,7 +14,7 @@ export default function Movie({ movie, onDelete, onEdit }) {
     //translation
     const { t } = useTranslation(Constants.TRANSLATION_MOVIES, { keyPrefix: Constants.TRANSLATION_MOVIES });
 
-    //modal
+    //toggle
     const { status: showEdit, toggleStatus: toggleShowEdit } = useToggle();
 
     const updateMovie = (updateMovieID, object) => {

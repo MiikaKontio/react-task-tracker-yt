@@ -71,7 +71,7 @@ export default function Movie({ movie, onDelete, onEdit }) {
                 !movie.haveAtHome &&
                 <Button
                     onClick={() => { markHaveAtHome() }}
-                    variant={Constants.VARIANT_DANGER} 
+                    variant={Constants.VARIANT_DANGER}
                     style={{ marginTop: '5px' }}>
                     {t('have_not')}&nbsp;
                     <FaSquare style={{ cursor: 'pointer', fontSize: '1.2em' }} />

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function CustomCard({ id, iconName, title,
     showStarRating, stars, deleteConfirmText, subTitle, description, onDelete,
-    linkText, linkUrl, children, editClicked
+    linkText, linkUrl, children, editClicked, text
 }) {
 
     return (
@@ -60,6 +60,12 @@ export default function CustomCard({ id, iconName, title,
                     description !== '' &&
                     <Card.Text>
                         {description}
+                    </Card.Text>
+                }
+                {
+                    text !== '' &&
+                    <Card.Text>
+                        {text}
                     </Card.Text>
                 }
                 {
